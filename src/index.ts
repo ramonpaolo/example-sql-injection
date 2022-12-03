@@ -18,16 +18,12 @@ const database = new pg.Client({ password: 'postgresql', user: 'postgresql', hos
     }
 })()
 
-type Country = 'Brazil' | 'United States';
-
 interface IUser {
     name: string;
-    age?: string;
-    country: Country;
 }
 
 app.route('/users').get(async (req, res) => {
-    const limit = parseInt(req.body.limit) || 100;
+    const limit = parseInt(String(req.query.limit)) || 100;
 
     const resultQuery = await database.query(`SELECT * FROM "users" LIMIT ${limit}`)
     const rows: IUser[] = resultQuery.rows
